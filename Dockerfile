@@ -1,6 +1,6 @@
 FROM debian:stable-slim
 LABEL Description="Use the Balena CLI to perform actions"
-ARG BALENA_CLI_VERSION=v12.44.23
+ARG BALENA_CLI_VERSION=v12.44.24
 # Install the standalone balena-cli package
 RUN apt-get update && apt-get install -y \
     curl \
