@@ -21,6 +21,8 @@ if [[ "${INPUT_BALENA_SECRETS}" != "" ]]; then
   echo ${INPUT_BALENA_SECRETS} > ~/.balena/secrets.json
 fi
 
+echo $PATH
+ls -alh /opt/balena-cli/ 
 # Log in to Balena
 balena login --token ${INPUT_BALENA_API_TOKEN} > /dev/null
 

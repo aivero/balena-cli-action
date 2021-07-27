@@ -1,15 +1,15 @@
-name: 'Balena CLI'
+name: "Balena CLI"
 branding:
   color: "yellow"
   icon: "upload-cloud"
-description: 'Continuously deliver your IoT applications to BalenaCloud'
+description: "Continuously deliver your IoT applications to BalenaCloud"
 inputs:
   application_path:
     description: "Optional. Provide a subfolder path to your BalenaCloud application, example: ./balena-wpe"
     required: false
     default: "."
   balena_api_token:
-    description: 'BalenaCloud API Key'
+    description: "BalenaCloud API Key"
     required: true
   balena_command:
     description: "The command to execute with balena"
@@ -17,8 +17,14 @@ inputs:
   balena_secrets:
     description: "Optional contents of a balena secrets.json file"
     required: false
+  balena_cli_version:
+    description: "balena cli"
+    required: true
+    default: "12.40.0"
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  args:
-    - ${{ inputs.balena_command }}
+  using: "composite"
+  steps:
+    - run: curl -O -sSL https://github.com/balena-io/balena-cli/releases/download/v${{ inputs.balena_cli_version }}/balena-cli-v${{ inputs.balena_cli_version }}-linux-x64-standalone.zip && unzip balena-cli-*-linux-x64-standalone.zip
+      shell: bash
+    - run: export PATH=$PATH:${{ github.action_path }}/balena-cli/ && export INPUT_APPLICATION_PATH=${{ inputs.application_path }} && export INPUT_BALENA_API_TOKEN=${{ inputs.balena_api_token }} && export INPUT_BALENA_SECRETS=${{ inputs.balena_secrets }}  && ${{ github.action_path }}/entrypoint.sh ${{ inputs.balena_command }}
+      shell: bash
